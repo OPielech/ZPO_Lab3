@@ -18,6 +18,8 @@ public class CSVReader {
 //        numberOfTeachersWithLowerSalaryThan(120000);
 //        averageSalaryWithStandardDeviation();
 //        numberOfDistrictsInCounty();
+
+        averageSalaryWithStandardDeviationForPosition("Elementary Teacher");
     }//end of main
 
 
@@ -158,7 +160,7 @@ public class CSVReader {
         }//end of try
         return average;
 
-    }//end of averageSalaryWithStandardDeviation
+    }//end of average
 
     public static void averageSalaryWithStandardDeviation() throws IOException {
         String filePath = "src\\main\\resources\\Lancaster_County_School_Salaries.csv";
@@ -201,8 +203,8 @@ public class CSVReader {
 
         }//end of try
 
-        System.out.println("Average salary: " + average());
-        System.out.println("Standard deviation: "+ standardDeviation);
+        System.out.printf("Average salary: %.2f\n", average());
+        System.out.printf("Standard deviation: %.2f\n",standardDeviation);
     }//end of averageSalaryWithStandardDeviation
 
     public static void numberOfDistrictsInCounty() throws IOException {
@@ -244,10 +246,9 @@ public class CSVReader {
         System.out.println("Number of districts in county: " + counter);
     }//end of numberOfDistrictsInCounty
 
-    public static double averageForEachPosition() throws IOException {
+    public static double averageForPosition(String position) throws IOException {
         String filePath = "src\\main\\resources\\Lancaster_County_School_Salaries.csv";
         ArrayList list=new ArrayList();
-        ArrayList positions = new ArrayList();
         int n = 0;
         long sum = 0;
         double average = 0;
@@ -272,63 +273,64 @@ public class CSVReader {
                 if(list.contains(teacher.toString())){
                 } else{
                     list.add(teacher.toString());
-                    n++;
-
-                    if (positions.contains(teacher.getPosition())) {
-                    } else {
-                        positions.add(teacher.getPosition());
-                    }
-                    if (teacher.getSalary() != 0) {
-                        sum += teacher.getSalary();
+                    if(teacher.getPosition().equalsIgnoreCase(position)) {
+                        n++;
+                        if (teacher.getSalary() != 0) {
+                            sum += teacher.getSalary();
+                        }//end of if
                     }//end of if
-                }//end of while
-                average = sum / n;
-                }
-
-
+                }//end of else
+            }//end of while
+            average = sum / n;
         }//end of try
         return average;
-    }//end of averageForEachPosition
 
-//    public static void averageSalaryWithStandardDeviationForEachPosition(String district) throws IOException {
-//        String filePath = "src\\main\\resources\\Lancaster_County_School_Salaries.csv";
-//        ArrayList list=new ArrayList();
-//        ArrayList positions=new ArrayList();
-//
-//        int counter=0;
-//
-//        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
-//            ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
-//            String[] memberFieldsToBindTo = {"name", "surname", "salary", "district", "position"};
-//
-//            strategy.setType(Teacher.class);
-//            strategy.setColumnMapping(memberFieldsToBindTo);
-//
-//            CsvToBean<Teacher> csvToBean = new CsvToBeanBuilder(reader)
-//                    .withMappingStrategy(strategy)
-//                    .withSkipLines(1)
-//                    .withIgnoreLeadingWhiteSpace(true)
-//                    .build();
-//            Iterator<Teacher> teacherIterator = csvToBean.iterator();
-//
-//
-//            while (teacherIterator.hasNext()) {
-//                Teacher teacher = teacherIterator.next();
-//                if(list.contains(teacher.toString())){
-//                } else {
-//                    list.add(teacher.toString());
-//                    if (teacher.getDistrict().equalsIgnoreCase(district)) {
-//                        if (positions.contains(teacher.getPosition())) {
-//                        } else {
-//                            positions.add(teacher.getPosition());
-//                            counter++;
-//                        }
-//                    }
-//                }
-//            }//end of if
-//        }//end of while
-//
-//        System.out.println("Number of districts in county: "+counter);
-//    }//end of numberOfDistrictsInCounty
+    }//end of average
+
+    public static void averageSalaryWithStandardDeviationForPosition(String position) throws IOException {
+        String filePath = "src\\main\\resources\\Lancaster_County_School_Salaries.csv";
+        ArrayList list=new ArrayList();
+        int n = 0;
+        long sum = 0;
+        double standardDeviation = 0;
+        double average = averageForPosition(position);
+
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
+            ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
+            String[] memberFieldsToBindTo = {"name", "surname", "salary", "district", "position"};
+
+            strategy.setType(Teacher.class);
+            strategy.setColumnMapping(memberFieldsToBindTo);
+
+            CsvToBean<Teacher> csvToBean = new CsvToBeanBuilder(reader)
+                    .withMappingStrategy(strategy)
+                    .withSkipLines(1)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            Iterator<Teacher> teacherIterator = csvToBean.iterator();
+
+
+            while (teacherIterator.hasNext()) {
+                Teacher teacher = teacherIterator.next();
+                if(list.contains(teacher.toString())){
+                } else{
+                    list.add(teacher.toString());
+                    if(teacher.getPosition().equalsIgnoreCase(position))
+                    n++;
+
+                    if (teacher.getSalary() != 0) {
+                        sum += Math.pow(teacher.getSalary() - average, 2);
+                    }//end of if
+                }
+
+            }//end of while
+
+            standardDeviation = Math.sqrt(sum / n);
+
+        }//end of try
+
+        System.out.printf("Average salary for position %s: %.2f\n",position, averageForPosition(position));
+        System.out.printf("Standard deviation for position %s: %.2f\n",position,standardDeviation);
+    }//end of averageSalaryWithStandardDeviation
     }//end of class
 
