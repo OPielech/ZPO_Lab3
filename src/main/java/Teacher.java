@@ -16,24 +16,49 @@ public class Teacher {
     public Teacher() {
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getSurname() { return surname; }
-    public void setSurname(String surname) { this.surname = surname; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getSalary() { return salary; }
-    public void setSalary(int salary) { this.salary = salary; }
+    public String getSurname() {
+        return surname;
+    }
 
-    public String getDistrict() { return district; }
-    public void setDistrict(String district) { this.district = district; }
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder=new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(name)
                 .append(" ")
                 .append(surname)
@@ -47,17 +72,17 @@ public class Teacher {
         return stringBuilder.toString();
     }//end of toString
 
-    public boolean withHigherSalaryThan(int amount){
+    public boolean withHigherSalaryThan(int amount) {
         boolean withHigherSalaryThan = false;
-        if (getSalary()>amount)
-            withHigherSalaryThan=true;
+        if (getSalary() > amount)
+            withHigherSalaryThan = true;
         return withHigherSalaryThan;
     }//end of withHigherSalaryThan
 
-    public boolean withLowerSalaryThan(int amount){
+    public boolean withLowerSalaryThan(int amount) {
         boolean withLowerSalaryThan = false;
-        if (getSalary()<amount)
-            withLowerSalaryThan=true;
+        if (getSalary() < amount)
+            withLowerSalaryThan = true;
         return withLowerSalaryThan;
     }//end of withLowerSalaryThan
 }//end of class
